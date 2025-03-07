@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15.4)
 project(CPPUTILS LANGUAGES CXX)
 
-option(CPPUTILS_TEST "Enable testing" OFF)
+option(CPPUTILS_TEST "Enable testing" ON)
 
 # Adhere to GNU conventions
 include(GNUInstallDirs)
@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(fmt CONFIG)
+find_package(Boost)
 
 file(GLOB CPPUTILS_PUBLIC_HEADERS include/cpputils/*.h)
 file(GLOB CPPUTILS_SOURCES cpputils/*.cpp)
@@ -18,12 +19,15 @@ target_sources(
   cpputils
   PRIVATE ${CPPUTILS_SOURCES}
   PUBLIC ${CPPUTILS_PUBLIC_HEADERS})
-target_include_directories(cpputils PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                           $<INSTALL_INTERFACE:include/>)
+target_include_directories(
+  cpputils
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include/>
+  PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(cpputils PRIVATE fmt::fmt)
 
 if(CPPUTILS_TEST)
   find_package(GTest REQUIRED)
+  add_subdirectory(tests)
 endif()
 
 install(FILES "${CPPUTILS_PUBLIC_HEADERS}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/cpputils")
