@@ -14,7 +14,7 @@
 // clang-format off
 #define __CMP_EMPTY__(...)
 #define __CMP_INPUT_EMPTY__()   static_assert(false, "input param is empty");
-#define __CMP_INPUT_INVALID__() static_assert(false, "input param size must be odd");
+#define __CMP_INPUT_INVALID__() static_assert(false, "input param size must be even");
 #define __CMP_CHECK__(...)                                                                                                     \
   BOOST_PP_IF(BOOST_PP_EQUAL(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__), 0), __CMP_INPUT_EMPTY__, __CMP_EMPTY__)()                    \
   BOOST_PP_IF(BOOST_PP_EQUAL(BOOST_PP_MOD(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__), 2), 0), __CMP_EMPTY__, __CMP_INPUT_INVALID__)()
